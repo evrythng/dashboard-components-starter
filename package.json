@@ -1,5 +1,5 @@
 {
-  "name": "evrythng-component",
+  "name": "dashboard-components-starter",
   "version": "0.0.1",
   "description": "Starter for EVRYTHNG's Dashboard custom widgets (Angular + ES6 + Webpack)",
   "dependencies": {
@@ -46,14 +46,17 @@
     "test": "karma start"
   },
   "keywords": [
+    "evrythng",
+    "dashboard",
+    "components",
     "angular",
     "webpack",
     "es6"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/angularclass/NG6-starter.git"
+    "url": "https://github.com/evrythng/dashboard-components-starter.git"
   },
-  "author": "AngularClass",
+  "author": "EVRYTHNG",
   "license": "Apache-2.0"
 }
