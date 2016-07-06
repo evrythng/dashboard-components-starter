@@ -1,0 +1,23 @@
+my-map {
+  $button-color: #DA291C;
+
+  md-card-header {
+    .md-button {
+      md-icon {
+        color: $button-color !important;
+      }
+
+      &[disabled] md-icon {
+        color: #E0E0E0 !important;
+      }
+    }
+  }
+
+  .map-container {
+    height: 400px;
+  }
+
+  .leaflet-top {
+    z-index: initial;
+  }
+}

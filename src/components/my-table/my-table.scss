@@ -1,0 +1,26 @@
+my-table {
+  $header-background-color: #eee;
+  $header-font-size: 1.6rem;
+
+  md-whiteframe {
+    display: block;
+  }
+
+  md-toolbar {
+    background: $header-background-color !important;
+
+    .md-toolbar-tools {
+      > div {
+        font-size: $header-font-size;
+      }
+    }
+  }
+
+  md-content {
+    max-height: 300px;
+  }
+
+  md-progress-circular {
+    margin: 40px auto !important;
+  }
+}

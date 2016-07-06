@@ -1,0 +1,21 @@
+my-toolbar {
+  $background-color: #eee;
+  $search-input-offset: 40px;
+
+  md-toolbar {
+    background: $background-color !important;
+  }
+
+  md-autocomplete {
+    input {
+      margin-left: $search-input-offset;
+    }
+  }
+
+  .search-icon {
+    color: #BDBDBD;
+    position: relative;
+    right: -$search-input-offset;
+    z-index: 1;
+  }
+}
