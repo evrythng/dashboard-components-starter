@@ -24,7 +24,7 @@ ___
 
 ## Introduction
 
-This project provides examples of custom widgets, reusable components and shared services that will help you understand and quick start your own custom components in the EVRYTHNG Dashboard.
+This project provides examples of custom widgets, reusable components and shared services that will help you understand and kick-start your own custom components in the EVRYTHNG Dashboard.
 
 Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - Create Custom Widgets]().
 
