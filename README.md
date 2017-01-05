@@ -26,7 +26,7 @@ ___
 
 This project provides examples of custom widgets, reusable components and shared services that will help you understand and kick-start your own custom components in the EVRYTHNG Dashboard.
 
-Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/v1.0/docs/customize-dashboard-create-components).
+Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components).
 
 The Dashboard uses Angular 1.5 components as a great way to ensure a tasteful transition to Angular 2 and Web Components (e.g. Polymer). Having that in mind we chose a simple structure that resembles both Angular 2 components and Polymer elements for a smooth transition. Similarly, we also bundled this project with modern future-proof development tools such as ES6, Sass, Webpack and Gulp.
 
@@ -71,7 +71,7 @@ src
 
 ## Developing
 
-Refer to [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/v1.0/docs/customize-dashboard-create-components) for the environment setup. Specifically, make sure your system accepts self-signed certificates from localhost as any components bundle needs to be server over HTTPs.
+Refer to [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components) for the environment setup. Specifically, make sure your system accepts self-signed certificates from localhost as any components bundle needs to be server over HTTPs.
 
 The easiest way to develop is to serve the components locally and add the widgets to the Dashboard. Reloading the page will always display the recently updated components code.
 
@@ -130,7 +130,7 @@ You can use any of these services to host your bundles:
 
 ## Support and Questions
 
-Make sure you follow the step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/v1.0/docs/customize-dashboard-create-components), which includes all the necessary screenshots and information needed to setup custom widgets in the Dashboard and the development environment.
+Make sure you follow the step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components), which includes all the necessary screenshots and information needed to setup custom widgets in the Dashboard and the development environment.
 
 Visit [EVRYTHNG's Support](https://developers.evrythng.com/docs/support) page for more info.
 
