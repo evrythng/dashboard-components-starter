@@ -19,9 +19,7 @@ import webpackConfig from './webpack.config';
  * Bundles application modules with webpack
  */
 gulp.task('webpack', done => {
-  webpackConfig.entry[config.name] = config.paths.entry;
-
-  webpack(webpackConfig, (err, stats) => {
+  webpack(webpackDistConfig, (err, stats) => {
     if(err)  {
       throw new gutil.PluginError("webpack", err);
     }
@@ -40,10 +38,7 @@ gulp.task('webpack', done => {
  * Starts webpack dev server
  */
 gulp.task('serve', () => {
-  let compiler;
-
-  webpackDistConfig.entry.components = config.paths.entry;
-  compiler = webpack(webpackDistConfig);
+  const compiler = webpack(webpackConfig);
 
   serve({
     port: process.env.PORT || 3000,
@@ -65,6 +60,11 @@ gulp.task('serve', () => {
 });
 
 /**
+ * Alias for webpack task
+ */
+gulp.task('build', gulp.series('webpack'));
+
+/**
  * Deploys new component template
  */
 gulp.task('component', () => copyTemplate('component'));
@@ -77,7 +77,9 @@ gulp.task('service', () => copyTemplate('service'));
 /**
  * Uploads the built widgets to a EVRYTHNG File entity.
  */
-gulp.task('publish', ['build'], () => deployWidgets());
+gulp.task('publish', gulp.series('build', () => deployWidgets()));
 
-gulp.task('build', ['webpack']);
-gulp.task('default', ['serve']);
+/**
+ * Default task to run
+ */
+gulp.task('default', gulp.series('serve'));

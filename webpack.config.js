@@ -1,8 +1,11 @@
-var path = require('path');
+import path from 'path'
+import config from './tasks/config'
 
-module.exports = {
+export default {
   devtool: 'sourcemap',
-  entry: {},
+  entry: {
+    [config.name]: config.paths.entry
+  },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -19,4 +22,4 @@ module.exports = {
   },
   plugins: [],
   externals: ['angular-material', 'lodash', 'moment']
-};
+}

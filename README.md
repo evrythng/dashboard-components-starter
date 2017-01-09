@@ -94,7 +94,7 @@ Here's a list of available tasks:
 * `service`
   * scaffolds a new service. [Read below](#generating-components) for usage details.
 * `publish`
-  * builds and deploys the components to EVRYTHNG platform using Files API. [Read below](#deploying-using-files-api) for usage details.
+  * builds and deploys the components to EVRYTHNG platform using [the Files API](https://developers.evrythng.com/docs/files). [Read below](#deploying-using-files-api) for usage details.
 
   
 ### Testing
@@ -131,11 +131,11 @@ You can use any of these services to host your bundles:
 * [Files API](#deploying-using-files-api)
 * ...
 
-### Deploying using Files API
+### Deploying using the Files API
 
 The EVRYTHNG platform provides powerful cloud file storage system, or Files API, which could be used
-to store your custom components. The Files API requires an API key with valid permissions to be provided from environment. It could be done either with `EVT_AUTH` environment variable or `~./evt-auth` file.
-Ensure to have one of these before running `gulp publish`.
+to store your custom components. The Files API requires an API key with valid permissions to be provided from `EVT_AUTH` environment variable.
+Ensure to define it before running `gulp publish`.
 
 ## Support and Questions
 

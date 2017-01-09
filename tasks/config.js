@@ -28,17 +28,17 @@ export default {
     /**
      * All javascript sources, exluding tests
      */
-    js: inRoot('**/*!(.spec.js).js'),
+    js: resolveToRoot('**/*!(.spec.js).js'),
 
     /**
      * Stylesheet sources
      */
-    scss: inRoot('**/*.scss'),
+    scss: resolveToRoot('**/*.scss'),
 
     /**
      * Entry application point. The place where it start running.
      */
-    entry: inRoot('index.js'),
+    entry: resolveToRoot('index.js'),
 
     /**
      * Returns path to a given subset of templates by its type.
@@ -54,6 +54,6 @@ export default {
  * @param {String} glob
  * @returns {string|*}
  */
-function inRoot(glob = '') {
+function resolveToRoot(glob = '') {
   return path.join(cwd, root, glob); // src/{glob}
 }
