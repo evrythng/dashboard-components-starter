@@ -24,9 +24,9 @@ const config = {
 export default () => {
   return getApiKey()
     .then(apiKey => evrythng.setup({ apiKey }))
-    .then(() => console.log('//////////', evrythng.settings.apiKey))
     .then(() => Promise.all([getMeta(), getStats()]))
-    .then(upload);
+    .then(upload)
+    .then(err => JSON.stringify(err))
 };
 
 function getMeta() {

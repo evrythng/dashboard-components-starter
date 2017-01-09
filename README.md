@@ -133,8 +133,8 @@ You can use any of these services to host your bundles:
 
 ### Deploying using Files API
 
-EVRYTHNG platform provides powerful cloud file system, or Files API, which could be used
-to store your custom components. Files API requires an API key with valid permissions to be provided from environment. It could be done either with `EVT_AUTH` environment variable or `~./evt-auth` file.
+The EVRYTHNG platform provides powerful cloud file storage system, or Files API, which could be used
+to store your custom components. The Files API requires an API key with valid permissions to be provided from environment. It could be done either with `EVT_AUTH` environment variable or `~./evt-auth` file.
 Ensure to have one of these before running `gulp publish`.
 
 ## Support and Questions
