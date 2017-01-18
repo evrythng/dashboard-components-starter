@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import gutil from 'gulp-util';
 import request from 'request';
 import evrythng from 'evrythng-extended';
 
@@ -23,12 +24,13 @@ const taskConfig = {
  *
  * @return {Promise}
  */
-export default () => {
-  return readAPIKeyFromEnvironment()
+export default function deployWidgets() {
+  return readAPIKey()
     .then(apiKey => evrythng.setup({ apiKey }))
-    .then(() => Promise.all([getMeta(), getStats()]))
+    .then(getMeta)
+    .then(getStats)
     .then(upload)
-    .catch(err => JSON.stringify(err))
+    .catch(toGulpPluginError);
 };
 
 /**
@@ -51,13 +53,13 @@ function getMeta() {
  *
  * @return {Promise}
  */
-function getStats() {
+function getStats(meta) {
   return new Promise((resolve, reject) => {
     fs.stat(taskConfig.file, (err, stats) => {
       if (err) {
         reject(err);
       } else {
-        resolve(stats);
+        resolve([ stats, meta ]);
       }
     });
   });
@@ -90,8 +92,8 @@ function createMeta() {
  * @return {Promise}
  */
 function upload([ meta, stats ]) {
-  return new Promise((res, rej) => {
-    let req = request.put({
+  return new Promise((resolve, reject) => {
+    let uploadRequest = request.put({
       url: meta.uploadUrl,
       headers: {
         'x-amz-acl': 'public-read',
@@ -100,13 +102,13 @@ function upload([ meta, stats ]) {
       }
     });
 
-    let readStream = fs.createReadStream(taskConfig.file);
+    const readStream = fs.createReadStream(taskConfig.file);
 
-    req.on('response', res);
-    req.on('error', rej);
+    uploadRequest.on('response', resolve);
+    uploadRequest.on('error', reject);
 
-    readStream.on('error', rej);
-    readStream.pipe(req);
+    readStream.on('error', reject);
+    readStream.pipe(uploadRequest);
   });
 }
 
@@ -116,6 +118,25 @@ function upload([ meta, stats ]) {
  *
  * @returns {Promise}
  */
-function readAPIKeyFromEnvironment() {
-  return Promise.resolve(process.env['EVT_AUTH']);
+function readAPIKey() {
+  const key = process.env['EVT_AUTH'];
+
+  if (key) {
+    return Promise.resolve(key);
+  } else {
+    return Promise.reject(new Error('API key was not found in EVT_AUTH environment variable'));
+  }
+}
+
+/**
+ * Converts generic or evrythng.js errors to PluginErrors
+ *
+ * @param {Object} error
+ * @param {String[]} [error.errors]
+ * @param {String} [error.message]
+ */
+function toGulpPluginError(error) {
+  const message = error.errors ? error.errors.join('\n') : error.message;
+
+  throw new gutil.PluginError('deploy-widgets', message, { showStack: true });
 }

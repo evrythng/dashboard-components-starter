@@ -5,8 +5,8 @@ import gutil from 'gulp-util';
 import webpack  from 'webpack';
 import webpackDevMiddelware from 'webpack-dev-middleware';
 import webpackHotMiddelware from 'webpack-hot-middleware';
-import serve from 'browser-sync';
-import colorsSupported from 'supports-color';
+import browserSync from 'browser-sync';
+import supportsColor from 'supports-color';
 
 import config from './tasks/config';
 import copyTemplate from './tasks/copy-template';
@@ -18,37 +18,37 @@ import webpackConfig from './webpack.config';
 /**
  * Bundles application modules with webpack
  */
-gulp.task('webpack', done => {
+function compile(done) {
   webpack(webpackDistConfig, (err, stats) => {
     if(err)  {
       throw new gutil.PluginError("webpack", err);
     }
 
     gutil.log("[webpack]", stats.toString({
-      colors: colorsSupported,
+      colors: supportsColor,
       chunks: false,
       errorDetails: true
     }));
 
     done();
   });
-});
+}
 
 /**
  * Starts webpack dev server
  */
-gulp.task('serve', () => {
+function serve() {
   const compiler = webpack(webpackConfig);
 
-  serve({
+  browserSync({
     port: process.env.PORT || 3000,
     open: false,
-    server: {baseDir: root},
+    server: { baseDir: config.paths.root },
     https: true,
     middleware: [
       webpackDevMiddelware(compiler, {
         stats: {
-          colors: colorsSupported,
+          colors: supportsColor,
           chunks: false,
           modules: false
         },
@@ -57,29 +57,37 @@ gulp.task('serve', () => {
       webpackHotMiddelware(compiler)
     ]
   });
-});
-
-/**
- * Alias for webpack task
- */
-gulp.task('build', gulp.series('webpack'));
-
-/**
- * Deploys new component template
- */
-gulp.task('component', () => copyTemplate('component'));
-
-/**
- * Deploys new service template
- */
-gulp.task('service', () => copyTemplate('service'));
+}
 
 /**
  * Uploads the built widgets to a EVRYTHNG File entity.
  */
-gulp.task('publish', gulp.series('build', () => deployWidgets()));
+function publish() {
+  return gulp.series(compile, deployWidgets)();
+}
 
 /**
- * Default task to run
+ * Deploys new component template
  */
-gulp.task('default', gulp.series('serve'));
+function copyComponent() {
+  return copyTemplate('component');
+}
+
+/**
+ * Deploys new service template
+ */
+function copyService() {
+  return copyTemplate('service');
+}
+
+gulp.task('default', serve);
+gulp.task('serve', serve);
+
+gulp.task('webpack', compile);
+gulp.task('build', compile);
+
+gulp.task('publish', publish);
+
+gulp.task('component', copyComponent);
+gulp.task('service', copyService);
+
