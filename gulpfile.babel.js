@@ -60,13 +60,6 @@ function serve() {
 }
 
 /**
- * Uploads the built widgets to a EVRYTHNG File entity.
- */
-function publish() {
-  return gulp.series(compile, deployWidgets)();
-}
-
-/**
  * Deploys new component template
  */
 function copyComponent() {
@@ -86,8 +79,10 @@ gulp.task('serve', serve);
 gulp.task('webpack', compile);
 gulp.task('build', compile);
 
-gulp.task('publish', publish);
-
 gulp.task('component', copyComponent);
 gulp.task('service', copyService);
 
+/**
+ * Uploads the built widgets to a EVRYTHNG File entity.
+ */
+gulp.task('publish', gulp.series(compile, deployWidgets));
