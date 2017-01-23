@@ -59,7 +59,7 @@ function getStats(meta) {
       if (err) {
         reject(err);
       } else {
-        resolve([ stats, meta ]);
+        resolve([ meta, stats ]);
       }
     });
   });
