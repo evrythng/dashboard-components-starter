@@ -19,7 +19,7 @@ ___
     * [Gulp Tasks](#gulp-tasks)
     * [Testing](#testing)
     * [Generating Components](#generating-components)
-    * [Using base widget component](#using-widget-base)
+    * [Using the Base Widget Component](#using-the-base-widget-component)
 * [Deploying](#deploying)
 
 
@@ -27,13 +27,13 @@ ___
 
 This project provides examples of custom widgets, reusable components and shared services that will help you understand and kick-start your own custom components in the EVRYTHNG Dashboard.
 
-Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components).
+Please read the complete step by step guide in the [EVRYTHNG Developer Hub - Custom Dashboards](https://developers.evrythng.com/docs/using-the-dashboard-custom-dashboards).
 
 The Dashboard uses Angular 1.5 components as a great way to ensure a tasteful transition to Angular 2 and Web Components (e.g. Polymer). Having that in mind we chose a simple structure that resembles both Angular 2 components and Polymer elements for a smooth transition. Similarly, we also bundled this project with future-proof development tools such as ES6, Sass, Webpack and Gulp.
 
-These components are meant to live and be developed within the Dashboard itself. Hence, they use same base component as most of dashboard widgets as well as share services, styles and libraries with the main application as shown in the examples.
+These components are meant to live and be developed within the Dashboard itself. Hence, they use same base component as most of Dashboard widgets as well as share services, styles and libraries with the main application as shown in the examples.
 
-To read more about using base widget component, refer to [Using base widget component](#using-widget-base) section
+To read more about using base widget component, refer to [Using base widget component](#using-the-base-widget-component) section.
 
 
 ## Dependencies
@@ -74,7 +74,7 @@ src
 
 ## Developing
 
-Refer to [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components) for the environment setup. Specifically, make sure your system accepts self-signed certificates from localhost as any components bundle needs to be server over HTTPs.
+Refer to [EVRYTHNG Developer Hub - Custom Dashboards](https://developers.evrythng.com/docs/using-the-dashboard-custom-dashboards) for the environment setup. Specifically, make sure your system accepts self-signed certificates from localhost as any components bundle needs to be server over HTTPs.
 
 The easiest way to develop is to serve the components locally and add the widgets to the Dashboard. Reloading the page will always display the recently updated components code.
 
@@ -117,21 +117,21 @@ The component will be created, by default, inside `src/components`. To change th
 
 For example, running `gulp component --name my-search-toolbar --parent toolbars` will create a `my-search-toolbar` component at `src/components/toolbars/my-search-toolbar`.
   
-### Using base widget component
+### Using the Base Widget Component
    
-In order to provide consistent user experience of widgets, dashboard introduces `<evtx-widget-base>` higher-order component providing access to such a base features as widget resizing, hiding or cloning as well as widget configuration. It is not strictly required to use it but it will ensure your user have consistent experience for dashboard overall.
+In order to provide a consistent user experience of widgets, the Dashboard introduces the `<evtx-widget-base>` higher-order component providing access to such common features as widget resizing, hiding, or cloning, as well as widget configuration. It is not strictly required to use it but it will ensure your users have a consistent experience from their Dashboard overall.
 
-Base widget component allows you to:
-* Resize and move widget within the section grid
-* Clone widget for rapid prototyping of your dashboard
-* Hide unnecessary widget without deleting data about its state
-* Configure widget if it exports any customizable properties
-* Show spinner when loading
-* Refresh widget content on configuration update
+The base widget component allows you to:
+* Resize and move the widget within the section grid.
+* Clone the widget for rapid prototyping of your Dashboard layout.
+* Hide unnecessary widgets without deleting data about its state.
+* Configure the widget if it exports any customizable properties.
+* Show a spinner when loading.
+* Refresh the widget content on configuration update.
 
 But in order to access all these features it requires you to explicitly pass data object representing widget to it. This object could be accessed as a `evtWidget` binding on your widget and contains basic information about your widget instance.
 
-Check `my-map` component for more examples on implementing and using widget configuration.
+Check the `my-map` component for more examples on implementing and using widget configuration.
 
 
 
@@ -159,7 +159,7 @@ Ensure to define it before running `gulp publish`.
 
 ## Support and Questions
 
-Make sure you follow the step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components), which includes all the necessary screenshots and information needed to setup custom widgets in the Dashboard and the development environment.
+Make sure you follow the step by step guide in the [EVRYTHNG Developer Hub - Custom Dashboards](https://developers.evrythng.com/docs/using-the-dashboard-custom-dashboards), which includes all the necessary screenshots and information needed to setup custom widgets in the Dashboard and the development environment.
 
 Visit [EVRYTHNG's Support](https://developers.evrythng.com/docs/support) page for more info.
 
