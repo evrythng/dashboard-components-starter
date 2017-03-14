@@ -5,7 +5,7 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'sinon-chai'],
+    frameworks: ['mocha', 'sinon-stub-promise', 'sinon-chai'],
 
     // list of files/patterns to load in the browser
     files: [{ pattern: 'spec.bundle.js', watched: false }],
@@ -14,12 +14,13 @@ module.exports = function (config) {
     exclude: [],
 
     plugins: [
-      require("karma-chrome-launcher"),
-      require("karma-mocha"),
-      require("karma-mocha-reporter"),
-      require("karma-sinon-chai"),
-      require("karma-sourcemap-loader"),
-      require("karma-webpack")
+      require('karma-chrome-launcher'),
+      require('karma-mocha'),
+      require('karma-mocha-reporter'),
+      require('karma-sinon-chai'),
+      require('karma-sinon-stub-promise'),
+      require('karma-sourcemap-loader'),
+      require('karma-webpack')
     ],
 
     // preprocess matching files before serving them to the browser

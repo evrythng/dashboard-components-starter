@@ -1,26 +1,29 @@
 import './my-map.scss';
+import './configuration/evt-widget-config-marker-color/evt-widget-config-marker-color';
+
 import * as _ from 'lodash';
 
 export class MyMapController {
 
   /**
    * Setup injection and initialize component variables here.
+   *
+   * @param $rootScope - needed for listening of draggable state change event
    * @param $scope - needed for applying changes to view
+   * @param $timeout - needed for ensuring that reflow happens after component is rendered
    * @param Search - communication service between components
    * @param EVT - EVT.operator is a fully instantiated Operator scope from EVT.js
    * https://github.com/evrythng/evrythng-extended.js
+   * @param leafletData - provider of leaflet controller to manipulate the map
    */
-  constructor($scope, Search, EVT) {
+  constructor($rootScope, $scope, $timeout, Search, EVT, leafletData) {
     "ngInject";
+
     this.$scope = $scope;
+    this.$timeout = $timeout;
     this.Search = Search;
     this.EVT = EVT;
-
-    /**
-     * Widget title. Example of view binding.
-     * @type {string}
-     */
-    this.title = 'Real-time Actions';
+    this.leafletData = leafletData;
 
     /**
      * Thng chosen in filter toolbar.
@@ -45,6 +48,9 @@ export class MyMapController {
         scrollWheelZoom: false
       }
     };
+
+    // When entering or leaving draggable mode, ensure correct map size known
+    $rootScope.$on('draggableModeChanged', this.reflowMap.bind(this));
   }
 
   /**
@@ -72,7 +78,7 @@ export class MyMapController {
 
     // Listen for filter changes and update state accordingly.
     this.Search.onSearchChange(thng => this.filter = thng);
-
+    this.reflowMap();
   }
 
   /**
@@ -85,6 +91,13 @@ export class MyMapController {
   }
 
   /**
+   * Reacts to widget configuration change by updating marker styles
+   */
+  $onConfigChange() {
+    _.forOwn(this.map.markers, marker => marker.icon = this.getIcon());
+  }
+
+  /**
    * Subscribe to all types of actions and filter based
    * on the selected thng in the toolbar.
    */
@@ -92,20 +105,7 @@ export class MyMapController {
 
     // EVT service also contains WebSocket plugin:
     // https://github.com/evrythng/evrythng-ws.js
-    this.EVT.operator.action('all').subscribe(action => {
-
-      // Pin if there's no filter or if filter matches update.
-      if(!this.filter || this.filter.id === action.thng){
-        this.$scope.$apply(() => {
-          this.map.markers[action.id] = {
-            lat: action.location.position.coordinates[1],
-            lng: action.location.position.coordinates[0]
-          };
-        });
-      }
-
-    });
-
+    this.EVT.operator.action('all').subscribe(this.addAction.bind(this));
   }
 
   /**
@@ -116,40 +116,143 @@ export class MyMapController {
   }
 
   /**
+   * Adds action to the map
+   *
+   * @param {Object} action
+   */
+  addAction(action) {
+    if (this.isFilteredAction(action)) {
+      this.$scope.$apply(() => {
+        this.map.markers[action.id] = {
+          lat: action.location.position.coordinates[1],
+          lng: action.location.position.coordinates[0],
+          icon: this.getIcon()
+        };
+      });
+    }
+  }
+
+  /**
+   * Returns true if given action could be displayed
+   *
+   * @param {object} action
+   * @return {boolean}
+   */
+  isFilteredAction(action) {
+    const isFilteredThng = !this.filter || this.filter.id === action.thng;
+    const filteredActionTypes = _.get(this, 'evtWidget.config.actionTypes.value', []);
+    const isFilteredAction = filteredActionTypes.length ? filteredActionTypes.indexOf(action.type) !== -1 : true;
+
+    return isFilteredThng && isFilteredAction;
+  }
+
+  /**
    * Checks if there are any markers on the map.
    * @returns {boolean}
    */
   markersExist() {
     return !_.isEmpty(this.map.markers);
   }
+
+  /**
+   * Ensures leaflet knows current map size
+   */
+  reflowMap() {
+    this.leafletData.getMap()
+      .then(renderer => this.$timeout(() => renderer.invalidateSize()));
+  }
+
+  /**
+   * @typedef {object} Icon
+   * @property {string} iconUrl - url to load icon image
+   * @property {string} iconSize - icon image size to apply correct offsets
+   */
+
+  /**
+   * Returns icon object config for leflet based on current widget config
+   * @return {Icon}
+   */
+  getIcon() {
+    return {
+      iconUrl: this.getIconURL('pin-s', this.getIconColor()),
+      iconSize: [20, 50]
+    };
+  }
+
+  /**
+   * Returns desired marker color for the map, tries to read it from configuration
+   *
+   * @return {string}
+   */
+  getIconColor() {
+    return _.get(this, 'evtWidget.config.markerColor.value', '599CD2');
+  }
+
+  /**
+   * Builds an icon URL based on given name and color.
+   * for reference: https://www.mapbox.com/maki/
+   *
+   * @param {string} icon
+   * @param {string} color
+   * @return {string}
+   */
+  getIconURL(icon, color) {
+    return 'https://a.tiles.mapbox.com/v3/marker/' + icon + '+' + color + '.png';
+  }
 }
 
 export default {
   template: `
-    <md-card>
-      <md-card-header>
-        <md-card-header-text layout-align=" center">
-          <span class="md-headline">{{$ctrl.title}}</span>
-        </md-card-header-text>
-        <md-button ng-disabled="!$ctrl.markersExist()" 
-                   ng-click="$ctrl.clearMarkers()"
-                   class="md-icon-button md-primary" 
-                   aria-label="Clear pins">
-          <md-tooltip md-direction="left">Clear pins</md-tooltip>
-          <!-- Dashboard includes Material Desidng Icons: https://materialdesignicons.com/ -->
-          <md-icon class="mdi mdi-map-marker-off"></md-icon>
-        </md-button>
-      </md-card-header>
-      <md-card-content>
-        <p>This map pins new actions in real-time. Try adding some in the <a href="/testing">Testing</a> section.</p>
-        <leaflet class="map-container"
+    <evtx-widget-base class="without-footer" evt-widget="$ctrl.evtWidget" on-config-change="$ctrl.$onConfigChange()">
+      <widget-body layout="column" flex>
+        <leaflet flex
+                 class="map-container"
                  lf-center="$ctrl.map.center"
                  defaults="$ctrl.map.defaults"
                  markers="$ctrl.map.markers"
                  tiles="$ctrl.map.tiles">
         </leaflet>
-      </md-card-content>
-    </md-card>
+        <md-button ng-disabled="!$ctrl.markersExist()" 
+                   ng-click="$ctrl.clearMarkers()"
+                   class="md-fab md-mini" 
+                   aria-label="Clear pins">
+            <md-tooltip md-direction="left">Clear pins</md-tooltip>
+            <!-- Dashboard includes Material Desidng Icons: https://materialdesignicons.com/ -->
+            <md-icon class="mdi mdi-map-marker-off"></md-icon>
+        </md-button>
+      </widget-body>
+    </evtx-widget-base>
   `,
-  controller: MyMapController
+  controller: MyMapController,
+
+  /**
+   * In order to operate widget instance information about it
+   * should be passed to base component
+   */
+  bindings: {
+    evtWidget: '<'
+  },
+
+  /**
+   * This object stores default configuration for your widget
+   */
+  defaultConfig: {
+    title: {
+      value: 'Real-time Actions'
+    },
+
+    description: {
+      value: 'This map pins new actions in real-time'
+    },
+
+    actionTypes: {
+      type: 'actionTypes',
+      value: []
+    },
+
+    markerColor: {
+      type: 'markerColor',
+      value: '599CD2'
+    }
+  }
 };

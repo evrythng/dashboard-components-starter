@@ -2,9 +2,7 @@ my-table {
   $header-background-color: #eee;
   $header-font-size: 1.6rem;
 
-  md-whiteframe {
-    display: block;
-  }
+  display: flex;
 
   md-toolbar {
     background: $header-background-color !important;
@@ -14,10 +12,6 @@ my-table {
         font-size: $header-font-size;
       }
     }
-  }
-
-  md-content {
-    max-height: 300px;
   }
 
   md-progress-circular {

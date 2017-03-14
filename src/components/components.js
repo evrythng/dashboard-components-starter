@@ -7,4 +7,11 @@ export default angular.module('myModule.components', [])
   .component('myMap', myMap)
   .component('myChart', myChart)
   .component('myTable', myTable)
-  .component('myToolbar', myToolbar);
+  .component('myToolbar', myToolbar)
+  .config(WidgetsProvider => {
+    'ngInject';
+
+    WidgetsProvider.register('myMap', myMap);
+    WidgetsProvider.register('myChart', myChart);
+    WidgetsProvider.register('myTable', myTable);
+  });

@@ -18,7 +18,8 @@ ___
 * [Developing](#developing)
     * [Gulp Tasks](#gulp-tasks)
     * [Testing](#testing)
-	* [Generating Components](#generating-components)
+    * [Generating Components](#generating-components)
+    * [Using base widget component](#using-widget-base)
 * [Deploying](#deploying)
 
 
@@ -28,9 +29,11 @@ This project provides examples of custom widgets, reusable components and shared
 
 Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components).
 
-The Dashboard uses Angular 1.5 components as a great way to ensure a tasteful transition to Angular 2 and Web Components (e.g. Polymer). Having that in mind we chose a simple structure that resembles both Angular 2 components and Polymer elements for a smooth transition. Similarly, we also bundled this project with modern future-proof development tools such as ES6, Sass, Webpack and Gulp.
+The Dashboard uses Angular 1.5 components as a great way to ensure a tasteful transition to Angular 2 and Web Components (e.g. Polymer). Having that in mind we chose a simple structure that resembles both Angular 2 components and Polymer elements for a smooth transition. Similarly, we also bundled this project with future-proof development tools such as ES6, Sass, Webpack and Gulp.
 
-These components are meant to live and be developed within the Dashboard itself. Hence, they can share services, styles and libraries with the main application as shown in the examples.
+These components are meant to live and be developed within the Dashboard itself. Hence, they use same base component as most of dashboard widgets as well as share services, styles and libraries with the main application as shown in the examples.
+
+To read more about using base widget component, refer to [Using base widget component](#using-widget-base) section
 
 
 ## Dependencies
@@ -112,7 +115,24 @@ The parameter following the `--name` flag is the name of the component to be cre
 
 The component will be created, by default, inside `src/components`. To change this, apply the `--parent` flag, followed by a path relative to `src/components/`.
 
-For example, running `gulp component --name my-search-toolbar --parent toolbars` will create a `my-search-toolbar` component at `src/components/toolbars/my-search-toolbar`.  
+For example, running `gulp component --name my-search-toolbar --parent toolbars` will create a `my-search-toolbar` component at `src/components/toolbars/my-search-toolbar`.
+  
+### Using base widget component
+   
+In order to provide consistent user experience of widgets, dashboard introduces `<evtx-widget-base>` higher-order component providing access to such a base features as widget resizing, hiding or cloning as well as widget configuration. It is not strictly required to use it but it will ensure your user have consistent experience for dashboard overall.
+
+Base widget component allows you to:
+* Resize and move widget within the section grid
+* Clone widget for rapid prototyping of your dashboard
+* Hide unnecessary widget without deleting data about its state
+* Configure widget if it exports any customizable properties
+* Show spinner when loading
+* Refresh widget content on configuration update
+
+But in order to access all these features it requires you to explicitly pass data object representing widget to it. This object could be accessed as a `evtWidget` binding on your widget and contains basic information about your widget instance.
+
+Check `my-map` component for more examples on implementing and using widget configuration.
+
 
 
 ## Deploying

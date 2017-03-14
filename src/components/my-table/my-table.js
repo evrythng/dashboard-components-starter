@@ -13,7 +13,7 @@ export default {
     items: '<'
   },
   template: `
-    <md-whiteframe class="md-whiteframe-1dp">
+    <div flex layout="column">
       <md-toolbar>
         <div class="md-toolbar-tools">
           <div flex>Thng</div>
@@ -21,7 +21,7 @@ export default {
           <div flex>Value</div>
         </div>
       </md-toolbar>
-      <md-content>
+      <md-content flex>
         <md-progress-circular md-mode="indeterminate" ng-if="!$ctrl.items"></md-progress-circular>
         <md-list flex ng-if="$ctrl.items">
           <md-list-item class="md-1-line" ng-repeat="item in $ctrl.items">
@@ -33,7 +33,7 @@ export default {
           </md-list-item>
         </md-list>
       </md-content>
-    </md-whiteframe>
+    </div>
   `,
   controller: MyTableController
 };

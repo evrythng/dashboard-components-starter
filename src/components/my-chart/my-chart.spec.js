@@ -1,7 +1,7 @@
 import {MyChartController} from './my-chart';
 
 describe('my-chart component', () => {
-  let scope, evt, search, ctrl;
+  let rootScope, scope, timeout, q, evt, search, ctrl;
 
   const thng = {
       id: 'id1',
@@ -55,22 +55,21 @@ describe('my-chart component', () => {
     evt = {
       operator: {
         thng: sinon.stub().returns({
-          read: sinon.stub().returns({
-            then: (cb) => cb(thngs)
-          })
+          read: sinon.stub()
         })
       }
     };
     search = {
       onSearchChange: () => {}
     };
-    ctrl = new MyChartController(scope, search, evt);
-  });
-
-  it('should have initial state', () => {
-    expect(ctrl.title).to.equal('Real-time Properties');
-    expect(ctrl.subscriptions).to.be.empty; // no subscriptions yet
-    expect(ctrl.chart.series).to.be.empty; // no datapoints yet
+    rootScope = {
+      $on: sinon.stub()
+    };
+    q = {
+      when: sinon.stub().returnsPromise().resolves(thngs)
+    };
+    timeout = sinon.stub();
+    ctrl = new MyChartController(rootScope, scope, q, timeout, search, evt);
   });
 
   describe('normalizeProperties', () => {
@@ -82,6 +81,17 @@ describe('my-chart component', () => {
     });
   });
 
+  describe('instantiation', () => {
+    it('should have initial state', () => {
+      expect(ctrl.subscriptions).to.be.empty; // no subscriptions yet
+      expect(ctrl.chart.series).to.be.empty; // no datapoints yet
+    });
+
+    it('should listen for draggableModeChanged event', () => {
+      expect(rootScope.$on).to.have.been.calledWith('draggableModeChanged');
+    });
+  });
+
   describe('$onInit', () => {
     beforeEach(() => {
       sinon.spy(ctrl, 'subscribeToProperties');
@@ -90,6 +100,10 @@ describe('my-chart component', () => {
 
     it('should read thngs', () => {
       expect(evt.operator.thng().read).to.have.been.called;
+    });
+
+    it('should wrap promise with q', () => {
+      expect(q.when).to.have.been.called;
     });
 
     it('should normalize thngs properties', () => {
@@ -187,6 +201,37 @@ describe('my-chart component', () => {
       ctrl.addToChart(properties[0]);
       expect(ctrl.chart.series.length).to.equal(1);
       expect(ctrl.chart.series[0].data.length).to.equal(2);
+    });
+  });
+
+  describe('draggableStateChange event', () => {
+    let listener;
+
+    beforeEach(() => {
+      listener = rootScope.$on.lastCall.args[1];
+    });
+
+    it('should not trigger timeout when chart was not rendered', () => {
+      listener();
+
+      expect(timeout).not.to.have.been.called;
+    });
+
+    it('should trigger timeout when chart was rendered', () => {
+      ctrl.chart = { getHighcharts: true };
+      listener();
+
+      expect(timeout).to.have.been.called;
+    });
+
+    it('should retrieve highcharts instance and trigger reflow', () => {
+      let highcharts = { options: { chart: true }, reflow: sinon.stub() };
+      ctrl.chart = { getHighcharts: sinon.stub().returns(highcharts) };
+
+      listener();
+      timeout.lastCall.args[0]();
+
+      expect(highcharts.reflow).to.have.been.called;
     });
   });
 });
