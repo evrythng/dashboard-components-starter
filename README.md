@@ -6,7 +6,7 @@
 
 # EVRYTHNG Dashboard Components Starter
 
-> The official repo to start building custom widgets for the EVRYTHNG Dashboard with [Angular](https://angularjs.org), [ES6](https://git.io/es6features), and [Webpack](http://webpack.github.io/).
+> The official repo to start building custom widgets for the EVRYTHNG Dashboard with [Angular](https://angularjs.org), and [Webpack](https://webpack.js.org/).
 
 ___
 
@@ -26,9 +26,7 @@ ___
 
 This project provides examples of custom widgets, reusable components and shared services that will help you understand and kick-start your own custom components in the EVRYTHNG Dashboard.
 
-Please read the complete step by step guide in the [EVRYTHNG Developer Hub - Custom Dashboards](https://developers.evrythng.com/docs/using-the-dashboard-custom-dashboards).
-
-The Dashboard uses Angular 1.5 components as a great way to ensure a tasteful transition to Angular 2 and Web Components (e.g. Polymer). Having that in mind we chose a simple structure that resembles both Angular 2 components and Polymer elements for a smooth transition. Similarly, we also bundled this project with future-proof development tools such as ES6, Sass, Webpack and Gulp.
+Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/using-the-dashboard-customization).
 
 These components are meant to live and be developed within the Dashboard itself. Hence, they use same base component as most of Dashboard widgets as well as share services, styles and libraries with the main application as shown in the examples.
 
@@ -95,8 +93,6 @@ Here's a list of available tasks:
   * scaffolds a new component. [Read below](#generating-components) for usage details.
 * `service`
   * scaffolds a new service. [Read below](#generating-components) for usage details.
-* `publish`
-  * builds and deploys the components to EVRYTHNG platform using [the Files API](https://developers.evrythng.com/docs/files). [Read below](#deploying-using-files-api) for usage details.
 
   
 ### Testing
@@ -146,14 +142,7 @@ You can use any of these services to host your bundles:
 * [AWS S3](https://aws.amazon.com/s3/)
 * [Google Cloud Platform](https://cloud.google.com/)
 * [Netlify](https://www.netlify.com/)
-* [Files API](#deploying-using-files-api)
 * ...
-
-### Deploying using the Files API
-
-The EVRYTHNG platform provides powerful cloud file storage system, or Files API, which could be used
-to store your custom components. The Files API requires an API key with valid permissions to be provided from `EVT_AUTH` environment variable.
-Ensure to define it before running `gulp publish`.
 
 ## Support and Questions
 
