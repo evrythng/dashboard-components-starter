@@ -22,7 +22,6 @@ ___
     * [Using the Base Widget Component](#using-the-base-widget-component)
 * [Deploying](#deploying)
 
-
 ## Introduction
 
 This project provides examples of custom widgets, reusable components and shared services that will help you understand and kick-start your own custom components in the EVRYTHNG Dashboard.
@@ -129,8 +128,7 @@ The base widget component allows you to:
 * Show a spinner when loading.
 * Refresh the widget content on configuration update.
 
-But in order to access all these features it requires you to explicitly pass data object representing widget to it. This object could be accessed as a `evtWidget` binding on your widget and contains basic information about your widget instance.
-
+For the dashboard to recognize your component as widget, it's required to provide `evtWidget` field in component definition object. 
 Check the `my-map` component for more examples on implementing and using widget configuration.
 
 

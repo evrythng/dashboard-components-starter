@@ -1,7 +1,7 @@
 {
   "name": "dashboard-components-starter",
   "version": "0.1.0",
-  "description": "Starter for EVRYTHNG's Dashboard custom widgets (Angular + ES6 + Webpack)",
+  "description": "Starter for EVRYTHNG's Dashboard custom widgets (Angular + Webpack)",
   "dependencies": {
     "angular": "^1.5.0",
     "lodash": "^4.13.1"

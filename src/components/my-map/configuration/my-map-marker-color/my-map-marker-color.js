@@ -1,10 +1,12 @@
 'use strict';
 
-import './evt-widget-config-marker-color.scss';
+import './my-map-marker-color.scss';
 
 /**
  * Configuration component example
- * Allows to select color to be used for markers on the map
+ * Allows to select color to be used for markers on the map.
+ * To be used correctly, should have certain interface (bindings) exposed.
+ * More could be found in component definition at the bottom.
  */
 class EvtWidgetConfigMarkerColor {
 
@@ -30,7 +32,7 @@ class EvtWidgetConfigMarkerColor {
   $onInit() {
     /**
      * Defines model of colors to allow selection from
-     * @type {Color[]}
+     * @type {ColorCard[]}
      */
     this.colors = [
       ...this.EvtColorCategory.primaryPalette,
@@ -46,7 +48,7 @@ class EvtWidgetConfigMarkerColor {
   /**
    * Selects the color, updates model and triggers change expression binding
    *
-   * @param {Color} color
+   * @param {ColorCard} color
    */
   select(color) {
     if (!this.isDisabled) {
@@ -62,14 +64,14 @@ class EvtWidgetConfigMarkerColor {
   /**
    * Deselects given color
    *
-   * @param {Color} color
+   * @param {ColorCard} color
    */
   deselect(color) {
     color.selected = false;
   }
 
   /**
-   * @typedef {object} Color
+   * @typedef {object} ColorCard
    * @property {number} height - defines md-whiteframe height of color card
    * @property {string} value - real color value
    * @property {boolean} selected - whether this color selected or not
@@ -79,7 +81,7 @@ class EvtWidgetConfigMarkerColor {
    * Converts given hex string to color model
    *
    * @param {string} hex
-   * @return {Color}
+   * @return {ColorCard}
    */
   hexToColor(hex) {
     const value = hex.replace('#', '');
@@ -98,7 +100,6 @@ class EvtWidgetConfigMarkerColor {
    * @return {boolean}
    */
   isModelValue(hex) {
-    console.log(this.model.config);
     return this.model.config.value === hex;
   }
 }
@@ -107,8 +108,34 @@ angular.module('myModule.components.configuration.evtWidgetConfigMarkerColor', [
   .component('evtWidgetConfigMarkerColor', {
     controller: EvtWidgetConfigMarkerColor,
     bindings: {
+      /**
+       * All editor components will have these specific
+       * bindings listed.
+       *
+       * Model is an object, containing configuration field information.
+       * For sufficient editing, is enough to store/retrieve required model
+       * value from `config.value` field in model. We encourage you to check out
+       * what else is exposed there.
+       * {
+       *   config: {
+       *     value: 'Model Value to be stored'
+       *   }
+       * }
+       */
       model: '<',
+
+      /**
+       * onChange should be called as soon as configuration editor
+       * considers that user have changed something in the model, which
+       * should be stored afterwards.
+       */
       onChange: '&',
+
+      /**
+       * When isDisabled set to true, configuration editor is advised to
+       * disable its internal state for editing. For example, by disabling user
+       * interaction with fields or buttons which editor component may have.
+       */
       isDisabled: '<'
     },
     template: `

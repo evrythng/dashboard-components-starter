@@ -1,5 +1,5 @@
 import './my-map.scss';
-import './configuration/evt-widget-config-marker-color/evt-widget-config-marker-color';
+import './configuration/my-map-marker-color/my-map-marker-color';
 
 import * as _ from 'lodash';
 
@@ -225,34 +225,35 @@ export default {
   `,
   controller: MyMapController,
 
-  /**
-   * In order to operate widget instance information about it
-   * should be passed to base component
-   */
-  bindings: {
-    evtWidget: '<'
-  },
 
   /**
    * This object stores default configuration for your widget
    */
-  defaultConfig: {
-    title: {
-      value: 'Real-time Actions'
-    },
+  evtWidget: {
+    defaultConfig: {
+      title: {
+        value: 'Real-time Actions'
+      },
 
-    description: {
-      value: 'This map pins new actions in real-time'
-    },
+      description: {
+        value: 'This map pins new actions in real-time'
+      },
 
-    actionTypes: {
-      type: 'actionTypes',
-      value: []
-    },
+      actionTypes: {
+        editor: 'evt-widget-config-action-types',
+        value: []
+      },
 
-    markerColor: {
-      type: 'markerColor',
-      value: '599CD2'
+      /**
+       * Example of custom editor for widget configuration.
+       * "editor" field should be a name of component with certain interface, accepting
+       * configuration model and exposing changes. More could be found in "my-map-marker-color"
+       * component sources, in "configuration" folder
+       */
+      markerColor: {
+        editor: 'my-map-marker-color',
+        value: '599CD2'
+      }
     }
   }
 };

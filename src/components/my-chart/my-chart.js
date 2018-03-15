@@ -241,23 +241,21 @@ export default {
   controller: MyChartController,
 
   /**
-   * In order to operate widget instance information about it
-   * should be passed to base component
+   * This object holds the configuration of a widget,
+   * to be used by the Dashboard
    */
-  bindings: {
-    evtWidget: '<'
-  },
+  evtWidget: {
+    /**
+     * This object stores default configuration for your widget
+     */
+    defaultConfig: {
+      title: {
+        value: 'Real-time Properties',
+      },
 
-  /**
-   * This object stores default configuration for your widget
-   */
-  defaultConfig: {
-    title: {
-      value: 'Real-time Properties',
-    },
-
-    description: {
-      value: 'This widget updates the table and chart with new property updates in real-time.'
+      description: {
+        value: 'This widget updates the table and chart with new property updates in real-time.'
+      }
     }
   }
 };
