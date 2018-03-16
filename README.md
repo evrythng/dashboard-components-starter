@@ -25,7 +25,7 @@ ___
 
 ## Quick Start
 
-This section given step-by-step guide on how to get your first widget available on your custom dashboard.
+This section gives a step-by-step guide on how to get your first widget available on your custom dashboard.
 For completing this guide, please ensure you're comfortable with `git`, `node`, `npm` and `javascript` overall.
 More detailed explanations on each step could be found at sections below.
 
@@ -40,7 +40,7 @@ More detailed explanations on each step could be found at sections below.
   * `npm start`
 5. Your new bundle is available at [https://localhost:3000/components.bundle.js](https://localhost:3000/components.bundle.js) URL by default. Open it in your browser and you'll see "Untrusted" certificate screen. Ensure that you marked that certificate as trusted. It'll allow remote dashboard to load bundle from your localhost over secure connection.
 6. Add the one of the widgets from bundle to the dashboard, with following [https://developers.evrythng.com/docs/using-the-dashboard-customization-dashboards#section-add-a-widget](guide)
-7. Modify code of one of the widgets and reload the dashboard page. Changes should be reflected if all set up correctly.
+7. Modify the code of one of the widgets and reload the dashboard page. Changes should be reflected if all set up correctly.
 
 ## Introduction
 
@@ -50,7 +50,7 @@ Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - C
 
 These components are meant to live and be developed within the Dashboard itself. Hence, they use same base component as most of Dashboard widgets as well as share services, styles and libraries with the main application as shown in the examples.
 
-To read more about using base widget component, refer to [Using base widget component](#using-the-base-widget-component) section.
+To read more about using the base widget component, refer to [Using the base widget component](#using-the-base-widget-component) section.
 
 
 ## Dependencies
