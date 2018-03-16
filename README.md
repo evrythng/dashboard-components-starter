@@ -11,6 +11,7 @@
 ___
 
 ## Table of Contents
+* [Quick Start](#quick-start)
 * [Introduction](#introduction)
 * [Dependencies](#dependencies)
 * [Installing](#installing)
@@ -18,9 +19,28 @@ ___
 * [Developing](#developing)
     * [Gulp Tasks](#gulp-tasks)
     * [Testing](#testing)
-	* [Generating Components](#generating-components)
+    * [Generating Components](#generating-components)
+    * [Using the Base Widget Component](#using-the-base-widget-component)
 * [Deploying](#deploying)
 
+## Quick Start
+
+This section gives a step-by-step guide on how to get your first widget available on your custom dashboard.
+For completing this guide, please ensure you're comfortable with `git`, `node`, `npm` and `javascript` overall.
+More detailed explanations on each step could be found at sections below.
+
+1. Ensure you have `git`, `node` and `npm` installed 
+  * [node.js official download page](https://nodejs.org/en/download/)
+  * [git official download page](https://git-scm.com/downloads)
+2. Clone this repository to your local machine
+  * `git clone https://github.com/evrythng/dashboard-components-starter.git`
+3. Install all the dependencies
+  * `npm install`
+4. Start the dev server
+  * `npm start`
+5. Your new bundle is available at [https://localhost:3000/components.bundle.js](https://localhost:3000/components.bundle.js) URL by default. Open it in your browser and you'll see "Untrusted" certificate screen. Ensure that you marked that certificate as trusted. It'll allow remote dashboard to load bundle from your localhost over secure connection.
+6. Add the one of the widgets from bundle to the dashboard, with following [https://developers.evrythng.com/docs/using-the-dashboard-customization-dashboards#section-add-a-widget](guide)
+7. Modify the code of one of the widgets and reload the dashboard page. Changes should be reflected if all set up correctly.
 
 ## Introduction
 
@@ -28,7 +48,9 @@ This project provides examples of custom widgets, reusable components and shared
 
 Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/using-the-dashboard-customization).
 
-These components are meant to live and be developed within the Dashboard itself. Hence, they can share services, styles and libraries with the main application as shown in the examples.
+These components are meant to live and be developed within the Dashboard itself. Hence, they use same base component as most of Dashboard widgets as well as share services, styles and libraries with the main application as shown in the examples.
+
+To read more about using the base widget component, refer to [Using the base widget component](#using-the-base-widget-component) section.
 
 
 ## Dependencies
@@ -69,7 +91,7 @@ src
 
 ## Developing
 
-Refer to [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components) for the environment setup. Specifically, make sure your system accepts self-signed certificates from localhost as any components bundle needs to be server over HTTPs.
+Refer to [EVRYTHNG Developer Hub - Custom Dashboards](https://developers.evrythng.com/docs/using-the-dashboard-custom-dashboards) for the environment setup. Specifically, make sure your system accepts self-signed certificates from localhost as any components bundle needs to be server over HTTPs.
 
 The easiest way to develop is to serve the components locally and add the widgets to the Dashboard. Reloading the page will always display the recently updated components code.
 
@@ -108,7 +130,23 @@ The parameter following the `--name` flag is the name of the component to be cre
 
 The component will be created, by default, inside `src/components`. To change this, apply the `--parent` flag, followed by a path relative to `src/components/`.
 
-For example, running `gulp component --name my-search-toolbar --parent toolbars` will create a `my-search-toolbar` component at `src/components/toolbars/my-search-toolbar`.  
+For example, running `gulp component --name my-search-toolbar --parent toolbars` will create a `my-search-toolbar` component at `src/components/toolbars/my-search-toolbar`.
+  
+### Using the Base Widget Component
+   
+In order to provide a consistent user experience of widgets, the Dashboard introduces the `<evtx-widget-base>` higher-order component providing access to such common features as widget resizing, hiding, or cloning, as well as widget configuration. It is not strictly required to use it but it will ensure your users have a consistent experience from their Dashboard overall.
+
+The base widget component allows you to:
+* Resize and move the widget within the section grid.
+* Clone the widget for rapid prototyping of your Dashboard layout.
+* Hide unnecessary widgets without deleting data about its state.
+* Configure the widget if it exports any customizable properties.
+* Show a spinner when loading.
+* Refresh the widget content on configuration update.
+
+For the dashboard to recognize your component as widget, it's required to provide `evtWidget` field in component definition object. 
+Check the `my-map` component for more examples on implementing and using widget configuration.
+
 
 
 ## Deploying
@@ -128,7 +166,7 @@ You can use any of these services to host your bundles:
 
 ## Support and Questions
 
-Make sure you follow the step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/customize-dashboard-create-components), which includes all the necessary screenshots and information needed to setup custom widgets in the Dashboard and the development environment.
+Make sure you follow the step by step guide in the [EVRYTHNG Developer Hub - Custom Dashboards](https://developers.evrythng.com/docs/using-the-dashboard-custom-dashboards), which includes all the necessary screenshots and information needed to setup custom widgets in the Dashboard and the development environment.
 
 Visit [EVRYTHNG's Support](https://developers.evrythng.com/docs/support) page for more info.
 

@@ -1,7 +1,8 @@
 import {MyMapController} from './my-map';
 
 describe('my-map component', () => {
-  let evt, search, scope, ctrl;
+  let evt, search, scope, rootScope,
+    timeout, ctrl, leafletData, leafletMap;
 
   const position = {
       coords: {
@@ -11,6 +12,13 @@ describe('my-map component', () => {
     },
     filter = {
       id: 'thng1'
+    },
+    evtWidget = {
+      config: {
+        'actionTypes': {
+          value: [ '_CustomAction' ]
+        }
+      }
     };
 
 
@@ -30,13 +38,29 @@ describe('my-map component', () => {
     search = {
       onSearchChange: () => {}
     };
-    ctrl = new MyMapController(scope, search, evt);
+    rootScope = {
+      $on: sinon.stub()
+    };
+    timeout = sinon.stub();
+    leafletMap = {
+      invalidateSize: sinon.stub()
+    };
+    leafletData = {
+      getMap: sinon.stub().returnsPromise().resolves(leafletMap)
+    };
+
+    ctrl = new MyMapController(rootScope, scope, timeout, search, evt, leafletData);
   });
 
-  it('should have initial state', () => {
-    expect(ctrl.title).to.equal('Real-time Actions');
-    expect(ctrl.filter).to.be.null; // no filter
-    expect(ctrl.map.markers).to.be.empty; // no markers
+  describe('instantiation', () => {
+    it('should have initial state', () => {
+      expect(ctrl.filter).to.be.null; // no filter
+      expect(ctrl.map.markers).to.be.empty; // no markers
+    });
+
+    it('should listen for draggableModeChanged event', () => {
+      expect(rootScope.$on).to.have.been.calledWith('draggableModeChanged');
+    });
   });
 
   describe('$onInit', () => {
@@ -60,6 +84,15 @@ describe('my-map component', () => {
       expect(evt.operator.action).to.have.been.calledWith('all');
       expect(evt.operator.action().subscribe).to.have.been.called;
     });
+
+    it('should ensure map knows its size', () => {
+      expect(leafletData.getMap).to.have.been.called;
+      expect(timeout).to.have.been.calledAfter(leafletData.getMap);
+
+      timeout.lastCall.args[0]();
+
+      expect(leafletMap.invalidateSize).to.have.been.called;
+    });
   });
 
   describe('$onDestroy', () => {
@@ -81,6 +114,7 @@ describe('my-map component', () => {
       action = {
         id: 'actionId',
         thng: 'thng1',
+        type: '_Any',
         location: {
           position: {
             coordinates: [lng, lat]
@@ -112,10 +146,33 @@ describe('my-map component', () => {
       expect(ctrl.map.markers).to.be.empty;
     });
 
+    it('should not add pin to map if action type filtered', () => {
+      action.type = '_Any';
+      sinon.stub(evt.operator.action(), 'subscribe', cb => cb(action));
+
+      ctrl.evtWidget = evtWidget;
+      ctrl.subscribeToActions();
+      scope.$digest();
+      expect(ctrl.map.markers).to.be.empty;
+    });
+
     it('should add pin to map if filtered and matches', () => {
       sinon.stub(evt.operator.action(), 'subscribe', cb => cb(action));
 
       ctrl.filter = filter;
+      ctrl.subscribeToActions();
+      scope.$digest();
+      expect(ctrl.map.markers).to.not.be.empty;
+      expect(ctrl.map.markers[action.id]).to.be.ok;
+      expect(ctrl.map.markers[action.id].lat).to.equal(lat);
+      expect(ctrl.map.markers[action.id].lng).to.equal(lng);
+    });
+
+    it('should add pin to map if action type matches filter', () => {
+      action.type = '_CustomAction';
+      sinon.stub(evt.operator.action(), 'subscribe', cb => cb(action));
+
+      ctrl.evtWidget = evtWidget;
       ctrl.subscribeToActions();
       scope.$digest();
       expect(ctrl.map.markers).to.not.be.empty;
@@ -159,4 +216,16 @@ describe('my-map component', () => {
       expect(ctrl.filter).to.equal(filter);
     });
   });
+
+  describe('getIcon', () => {
+    it('should return icon config', () => {
+      let icon = ctrl.getIcon();
+      let color = ctrl.getIconColor();
+
+      expect(icon.iconUrl).to.include('pin-s');
+      expect(icon.iconUrl).to.include(color);
+      expect(icon.iconSize).to.eql([20, 50]);
+    });
+  });
+
 });

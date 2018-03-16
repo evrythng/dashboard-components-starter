@@ -1,7 +1,7 @@
 {
   "name": "dashboard-components-starter",
   "version": "0.1.0",
-  "description": "Starter for EVRYTHNG's Dashboard custom widgets (Angular + ES6 + Webpack)",
+  "description": "Starter for EVRYTHNG's Dashboard custom widgets (Angular + Webpack)",
   "dependencies": {
     "angular": "^1.5.0",
     "lodash": "^4.13.1"
@@ -27,6 +27,7 @@
     "karma-mocha-reporter": "^2.0.4",
     "karma-sinon": "^1.0.5",
     "karma-sinon-chai": "^1.2.2",
+    "karma-sinon-stub-promise": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.4",
     "karma-webpack": "^1.5.1",
     "mocha": "^2.5.3",
@@ -37,6 +38,7 @@
     "sass-loader": "^4.0.0",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
+    "sinon-stub-promise": "^4.0.0",
     "style-loader": "^0.13.1",
     "supports-color": "^3.1.2",
     "webpack": "^1.13.1",
@@ -45,7 +47,8 @@
     "yargs": "^4.7.1"
   },
   "scripts": {
-    "test": "karma start"
+    "test": "karma start",
+    "start": "gulp"
   },
   "keywords": [
     "evrythng",

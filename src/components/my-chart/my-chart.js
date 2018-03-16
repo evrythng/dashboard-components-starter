@@ -28,22 +28,24 @@ export class MyChartController {
 
   /**
    * Setup injection and initialize component variables here.
+   *
+   * @param $rootScope - needed for listening of draggable state change event
    * @param $scope - needed for applying changes to view
+   * @param $q - angular promise library to wire third-party thenable objects and digest cycle
+   * @param $timeout - needed for ensuring that reflow happens after component is rendered
    * @param Search - communication service between components
    * @param EVT - EVT.operator is a fully instantiated Operator scope from EVT.js
+   *
    * https://github.com/evrythng/evrythng-extended.js
    */
-  constructor($scope, Search, EVT) {
+  constructor($rootScope, $scope, $q, $timeout, Search, EVT) {
     "ngInject";
+
     this.$scope = $scope;
+    this.$timeout = $timeout;
     this.Search = Search;
     this.EVT = EVT;
-
-    /**
-     * Widget title. Example of view binding.
-     * @type {string}
-     */
-    this.title = 'Real-time Properties';
+    this.q = $q;
 
     /**
      * Store 'open' property update listeners.
@@ -61,8 +63,7 @@ export class MyChartController {
     this.chart = {
       options: {
         chart: {
-          defaultSeriesType: 'spline',
-          height: 356
+          defaultSeriesType: 'spline'
         }
       },
       series: [],
@@ -77,6 +78,9 @@ export class MyChartController {
         title: {text: ''}
       }
     };
+
+    // Whenever draggable mode changed - ensures chart have correct size
+    $rootScope.$on('draggableModeChanged', this.reflowChart.bind(this));
   }
 
   /**
@@ -85,7 +89,11 @@ export class MyChartController {
    * https://docs.angularjs.org/guide/component
    */
   $onInit() {
-    this.EVT.operator.thng().read().then(thngs => {
+    // Using q wrapper to connect promise returned by EVT to angular $digest cycle
+    // It guarantees that widget will be updated immediately as data resolved
+    this.q.when(
+      this.EVT.operator.thng().read()
+    ).then(thngs => {
 
       // Normalize properties. One row per thng + property.
       this.properties = _.flatten(
@@ -125,8 +133,11 @@ export class MyChartController {
     if (!angular.isArray(thngs)) thngs = [thngs];
 
     thngs.forEach(thng => {
+      // Building rest resource to make requests for
       var resource = thng.property();
 
+      // @see https://github.com/evrythng/evrythng-ws.js
+      // for more information about evrythng-ws
       resource.subscribe(updatedProperties => {
         updatedProperties.forEach(prop => {
           angular.extend(prop, {thng: thng.name});
@@ -186,32 +197,65 @@ export class MyChartController {
 
     this.$scope.$apply(() => series.data.push(datapoint));
   }
+
+  /**
+   * Reflows chart when needed.
+   * Ensures that it happens after current digest cycle run.
+   */
+  reflowChart() {
+    if (this.chart && this.chart.getHighcharts) {
+      // Ensure we'll try to reflow when highcharts
+      // will have updated state
+      this.$timeout(() => {
+        let highchart = this.chart.getHighcharts();
+
+        if (highchart.options && highchart.options.chart) {
+          highchart.reflow();
+        }
+      });
+    }
+  }
 }
 
 export default {
   template: `
-    <md-card>
-      <md-card-header>
-        <md-card-header-text>
-          <span class="md-headline">{{$ctrl.title}}</span>
-        </md-card-header-text>
-      </md-card-header>
-      <md-card-content>
-        <p>This widget updates the table and chart with new property updates in real-time. Try updating some <a href="/resources/thngs">Thng</a>'s properties.</p>
-        <div layout="row">
-          <div flex class="left">
-            <my-table items="$ctrl.properties"></my-table>
-          </div>
+    <evtx-widget-base evt-widget="$ctrl.evtWidget">
+      <widget-body layout="column" flex>
+        <p>Try updating some <a href="/resources/thngs">Thng</a>\'s properties.</p>
+        <div layout="row" flex>
+          <my-table flex class="left" items="$ctrl.properties"></my-table>
           <div flex class="right">
             <div class="empty" ng-if="!$ctrl.chart.series.length"
                  layout="column" layout-align="center center" layout-fill>
               <div>No data to display.</div>
             </div>
-            <highchart ng-if="$ctrl.chart.series.length" config="$ctrl.chart"></highchart>
+            <highchart ng-if="$ctrl.chart.series.length" config="$ctrl.chart" class="my-highchart"></highchart>
           </div>
         </div>
-      </md-card-content>
-    </md-card>
+      </widget-body>
+      <widget-footer layout="row" layout-align="start center">
+        <small ng-if="$ctrl.properties.length">Showing data for {{ $ctrl.properties.length }} {{ $ctrl.properties.length === 1 ? 'property' : 'properties' }}</small>
+      </widget-footer>
+    </evtx-widget-base>
   `,
-  controller: MyChartController
+  controller: MyChartController,
+
+  /**
+   * This object holds the configuration of a widget,
+   * to be used by the Dashboard
+   */
+  evtWidget: {
+    /**
+     * This object stores default configuration for your widget
+     */
+    defaultConfig: {
+      title: {
+        value: 'Real-time Properties',
+      },
+
+      description: {
+        value: 'This widget updates the table and chart with new property updates in real-time.'
+      }
+    }
+  }
 };
