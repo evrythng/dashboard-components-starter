@@ -36,9 +36,11 @@ More detailed explanations on each step could be found at sections below.
   * `git clone https://github.com/evrythng/dashboard-components-starter.git`
 3. Install all the dependencies
   * `npm install`
-4. Your new bundle is available at [https://localhost:3000/components.bundle.js](https://localhost:3000/components.bundle.js) URL by default. Open it in your browser and you'll see "Untrusted" certificate screen. Ensure that you marked that certificate as trusted. It'll allow remote dashboard to load bundle from your localhost over secure connection.
-5. Add the one of the widgets from bundle to the dashboard, with following [https://developers.evrythng.com/docs/using-the-dashboard-customization-dashboards#section-add-a-widget](guide)
-6. Modify code of one of the widgets and reload the dashboard page. Changes should be reflected if all set up correctly.
+4. Start the dev server
+  * `npm start`
+5. Your new bundle is available at [https://localhost:3000/components.bundle.js](https://localhost:3000/components.bundle.js) URL by default. Open it in your browser and you'll see "Untrusted" certificate screen. Ensure that you marked that certificate as trusted. It'll allow remote dashboard to load bundle from your localhost over secure connection.
+6. Add the one of the widgets from bundle to the dashboard, with following [https://developers.evrythng.com/docs/using-the-dashboard-customization-dashboards#section-add-a-widget](guide)
+7. Modify code of one of the widgets and reload the dashboard page. Changes should be reflected if all set up correctly.
 
 ## Introduction
 
