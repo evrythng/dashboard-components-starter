@@ -38,15 +38,18 @@ More detailed explanations on each step could be found at sections below.
   * `npm install`
 4. Start the dev server
   * `npm start`
-5. Your new bundle is available at [https://localhost:3000/components.bundle.js](https://localhost:3000/components.bundle.js) URL by default. Open it in your browser and you'll see "Untrusted" certificate screen. Ensure that you marked that certificate as trusted. It'll allow remote dashboard to load bundle from your localhost over secure connection.
-6. Add the one of the widgets from bundle to the dashboard, with following [https://developers.evrythng.com/docs/using-the-dashboard-customization-dashboards#section-add-a-widget](guide)
+5. Your new bundle is available at `https://localhost:3000/components.bundle.js` URL by default. Open it in your browser and you'll see "Untrusted" certificate screen. Ensure that you marked that certificate as trusted. It'll allow remote dashboard to load bundle from your localhost over secure connection.
+6. Add the one of the widgets from bundle to the dashboard, with following [https://developers.evrythng.com/docs/using-the-dashboard-customization-dashboards#section-adding-removing-widgets](guide)
 7. Modify the code of one of the widgets and reload the dashboard page. Changes should be reflected if all set up correctly.
+
+> Alternatively, use a [file upload service](#deploying) of your choice to host the bundle instead of using `localhost`.
+
 
 ## Introduction
 
 This project provides examples of custom widgets, reusable components and shared services that will help you understand and kick-start your own custom components in the EVRYTHNG Dashboard.
 
-Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub - Customize the Dashboard](https://developers.evrythng.com/docs/using-the-dashboard-customization).
+Please, visit the complete step by step guide in the [EVRYTHNG Developer Hub](https://developers.evrythng.com/docs/using-the-dashboard-customization-components).
 
 These components are meant to live and be developed within the Dashboard itself. Hence, they use same base component as most of Dashboard widgets as well as share services, styles and libraries with the main application as shown in the examples.
 
@@ -166,7 +169,7 @@ You can use any of these services to host your bundles:
 
 ## Support and Questions
 
-Make sure you follow the step by step guide in the [EVRYTHNG Developer Hub - Custom Dashboards](https://developers.evrythng.com/docs/using-the-dashboard-custom-dashboards), which includes all the necessary screenshots and information needed to setup custom widgets in the Dashboard and the development environment.
+Make sure you follow the step by step guide in the [EVRYTHNG Developer Hub](https://developers.evrythng.com/docs/using-the-dashboard-customization-components), which includes all the necessary screenshots and information needed to setup custom widgets in the Dashboard and the development environment.
 
 Visit [EVRYTHNG's Support](https://developers.evrythng.com/docs/support) page for more info.
 
