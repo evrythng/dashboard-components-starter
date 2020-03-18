@@ -1,10 +1,16 @@
-import myMap from './my-map/my-map';
-import myChart from './my-chart/my-chart';
-import myTable from './my-table/my-table';
-import myToolbar from './my-toolbar/my-toolbar';
+import tagitsmartWidget from './tagitsmart-wfe/tagitsmart-wfe';
+import srfeWidget from './srfe/srfe';
+import reciclayaWidget from './reciclaya/reciclaya';
+import homedepotWidget from './home-depot/home-depot';
+import realTimeActions from './evtx-realtime-action-list/evtx-realtime-action-list';
+import epcisActionList from './evtx-action-list-epcis/evtx-action-list-epcis.js';
+
+import raList from './ra-list/ra-list.js';
 
 export default angular.module('myModule.components', [])
-  .component('myMap', myMap)
-  .component('myChart', myChart)
-  .component('myTable', myTable)
-  .component('myToolbar', myToolbar);
+  .component('homedepotWidget', homedepotWidget)
+  .component('realTimeActions', realTimeActions)
+  .component('tagitsmartWidget', tagitsmartWidget)
+  .component('reciclayaWidget', reciclayaWidget)
+  .component('srfeWidget', srfeWidget)
+  .component('realtimeActions', raList);
