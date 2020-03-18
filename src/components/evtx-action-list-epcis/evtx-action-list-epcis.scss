@@ -1,0 +1,26 @@
+evtx-action-list-epcis {
+  md-virtual-repeat-container {
+    height: 100%;
+  }
+
+  widget-body.empty-message {
+    padding: 24px;
+  }
+
+  .list-widget .list-container {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .list-widget .mobile .list-container {
+    min-height: 400px;
+  }
+
+  no-overflow{
+    overflow:unset;
+  }
+
+  [flex="0"] {
+    display: none;
+  }
+}

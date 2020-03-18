@@ -1,0 +1,158 @@
+<evtx-widget-base no-margin
+                  without-footer
+                  evt-widget="$ctrl.evtWidget"
+                  loading="$ctrl.state.loading"
+                  on-config-change="$ctrl.search()"
+                  on-init="$ctrl.$onSizeChange(widget.getWidgetSize())"
+                  on-size-change="$ctrl.$onSizeChange(size)"
+                  class="list-widget">
+
+  <widget-body layout="column" ng-if="$ctrl.listIterator.getLength()">
+
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <div flex>
+          <span>Event Type</span>
+        </div>
+        <div flex="flex">
+          <span>Resource</span>
+        </div>
+        <div flex="flex">
+          <span>Date</span>
+        </div>
+        <div flex="flex">
+          <span>Location</span>
+        </div>
+        <div flex="flex">
+          <span>Business Transaction</span>
+        </div>
+        <div flex="flex">
+          <span>Application</span>
+        </div>
+        <div flex="flex">
+          <span>From/To Location</span>
+        </div>
+      </div>
+    </md-toolbar>
+
+    <md-content flex layout="column">
+
+      <md-virtual-repeat-container class="list-container" ng-class="{filtered: $ctrl.context.filter}">
+
+        <div md-virtual-repeat="item in $ctrl.listIterator" md-on-demand class="list-item"
+             layout="row" layout-align="start center"
+             ng-class="{alert:'bg-danger', warning:'bg-warning'}[item.type.customFields.alerttype]"
+             ng-click="$ctrl.openAction($event, item)">
+
+          <!--Name and icon-->
+          <div flex layout="row" layout-align="start center" class="overflow">
+            <evt-actiontype-color-preview  color="item.type.customFields.color"></evt-actiontype-color-preview>
+            <i ng-if="item.type.customFields.icon" ng-class="'glyphicon {{item.type.customFields.icon}}'"></i>
+            <div style="overflow:unset;line-height: 20px;" flex="flex">
+              <div title="{{item.type.customFields.displayname}}">{{item.type.customFields.displayname}}</div>
+              <div style="overflow:no" class="truncate small text-muted">
+                <span style="font-size: 10px;">{{item.id}}</span>
+              </div>
+            </div>
+          </div>
+
+<!--
+          <div flex="{{ { 'sm': 0,  'md': 0,  'lg': 15 }[$ctrl.getSize()] }}" class="truncate">
+            <evt-link state="app.dashboards.users" params="{userId: item.user.id}" ng-if="item.user">
+              {{item.user.firstName}} {{item.user.lastName}}
+            </evt-link>
+          </div>
+-->
+          <!--Resource-->
+          <div flex="flex">
+            <div style="line-height: 20px;" class="truncate" ng-if="item.target">
+              <evt-link state="{{ item.target.link }}" params="item.target.linkParams">{{$ctrl.getResourceId(item.target.name)}}</evt-link>
+              <div class="truncate small text-muted">{{$ctrl.getResourceType(item.target.name)}}</div>
+            </div>
+            <div style="line-height: 20px;" class="truncate" ng-if="!item.target">
+              <evt-link state="{{ item.target.link }}" params="item.target.linkParams">{{$ctrl.getResourceId(item.target.name)}}</evt-link>
+              <div class="truncate small text-muted">{{$ctrl.getResourceType(item.target.name)}}</div>
+            </div>
+          </div>
+
+          <!--Date-->
+          <div flex="flex">
+            <div title="{{ item.timestamp | evtDate }}">{{ $ctrl.refreshDate(item.timestamp) }}</div>
+          </div>
+
+          <!--Location-->
+          <div flex="flex">
+            <div class="truncate text-muted">
+              <span>{{ $ctrl.getResourceId(item.customFields["epcis:readPoint"]) || 'Unknown location' }}</span>
+            </div>
+          </div>
+
+          <!--PO-->
+          <div flex="flex">
+            <div style="line-height: 20px;" class="truncate" ng-if="item.customFields['epcis:bizTransactionList']['urn:epcglobal:cbv:btt:po']">
+              <span >{{ $ctrl.getResourceId(item.customFields['epcis:bizTransactionList']['urn:epcglobal:cbv:btt:po']) }}</span>
+              <div class="truncate small text-muted">{{$ctrl.getResourceType(item.customFields['epcis:bizTransactionList']['urn:epcglobal:cbv:btt:po'])}}</div>
+            </div>
+          </div>
+
+          <!--User-->
+          <div flex="flex" class="truncate">
+            <evt-link
+              state="app.projects.detail.applications.detail"
+              params="{
+                      project: item.application.project,
+                      projectId: item.application.project,
+                      applicationId: item.application.id
+                      }">
+              {{item.application.name}}
+            </evt-link>
+          </div>
+
+<!--
+          From location
+-->
+          <div flex="flex">
+            <div style="line-height: 20px;" class="truncate" ng-if="item.customFields['epcis:sourceList']['urn:epcglobal:cbv:sdt:location']">
+              <span >{{ $ctrl.getResourceId(item.customFields['epcis:sourceList']['urn:epcglobal:cbv:sdt:location']) }} to {{ $ctrl.getResourceId(item.customFields['epcis:destinationList']['urn:epcglobal:cbv:sdt:location']) }}</span>
+              <!--<div class="truncate small text-muted">{{$ctrl.getResourceType(item.customFields['epcis:sourceList']['urn:epcglobal:cbv:sdt:location'])}}</div>-->
+            </div>
+          </div>
+
+<!--
+          to location
+-->
+<!--
+          <div flex="flex">
+            <div style="line-height: 20px;" class="truncate" ng-if="item.customFields['epcis:destinationList']['urn:epcglobal:cbv:sdt:location']">
+              <span >{{ $ctrl.getResourceId(item.customFields['epcis:destinationList']['urn:epcglobal:cbv:sdt:location']) }}</span>
+              <div class="truncate small text-muted">{{$ctrl.getResourceType(item.customFields['epcis:destinationList']['urn:epcglobal:cbv:sdt:location'])}}</div>
+            </div>
+          </div>
+-->
+
+
+        </div>
+        <evt-list-control loading="$ctrl.listIterator.loading"></evt-list-control>
+      </md-virtual-repeat-container>
+    </md-content>
+  </widget-body>
+
+  <widget-body class="empty-message" layout="row" layout-align="center center"
+               ng-if="!$ctrl.state.loading && !$ctrl.listIterator.getLength()">
+    <div ng-if="$ctrl.context.filter" flex="95" flex-gt-sm="80" flex-gt-md="60" flex-gt-lg="50">
+      <h4>{{'searchEmpty' | translate}}</h4>
+    </div>
+
+    <div flex="95" flex-gt-sm="70" flex-gt-md="50" ng-if="!$ctrl.context.filter">
+      <h4>{{'actions.empty' | translate}}{{$ctrl.context.project? ' ' + ('inThisProject' | translate) : ''}}.</h4>
+      <p>{{'actions.hint' | translate}}</p>
+    </div>
+  </widget-body>
+  <widget-footer ng-if="$ctrl.displayTypes.length">
+    <small class="text-muted truncate"
+      translate="components.actions.list.filter"
+      translate-values="{ count: $ctrl.displayTypes.length, filter: $ctrl.displayTypes.join(', ') }">
+    </small>
+  </widget-footer>
+
+</evtx-widget-base>
